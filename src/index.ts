@@ -1,51 +1,80 @@
-export function imset<
-	TObject extends object,
-	TValue,
+export function imget<
+	T extends object,
+	K1 extends keyof T,
+	K2 extends keyof T[K1],
+	K3 extends keyof T[K1][K2],
 >(
-	object: TObject,
-	path: Array<string | number>,
-	value: TValue,
-) {
-	return shallowSet(object, path[0], value)
-}
+	object: T,
+	path: [K1, K2, K3],
+): T[K1][K2][K3] extends Primitive
+	? T[K1][K2][K3]
+	: DeepImmutable<T[K1][K2][K3]>
 
 export function imget<
-	TObject extends object,
-	TKey extends keyof TObject,
+	T extends object,
+	K1 extends keyof T,
+	K2 extends keyof T[K1],
 >(
-	object: TObject,
-	path: TKey,
+	object: T,
+	path: [K1, K2],
+): T[K1][K2] extends Primitive
+	? T[K1][K2]
+	: DeepImmutable<T[K1][K2]>
+
+export function imget<
+	T extends object,
+	K extends keyof T,
+>(
+	object: T,
+	path: [K],
+): T[K] extends Primitive
+	? T[K]
+	: DeepImmutable<T[K]>
+
+export function imget<
+	T extends object,
+	K1 extends keyof T,
+	K2 extends keyof T[K1],
+	K3 extends keyof T[K1][K2],
+>(
+	object: T,
+	path: [K1, K2?, K3?],
 ) {
-	return object[path] as DeepImmutable<TObject[TKey]>
+	const target = object[path[0]]
+	return typeof target === 'object'
+		? path.length === 1
+			? Object.assign({}, target)
+			: imget(target as any, path.slice(1) as any)
+		: target
 }
 
-function shallowSet<
-	TObject extends object,
-	TValue,
->(
-	object: TObject,
-	path: string | number,
-	value: TValue,
-) {
-	return Object.assign(
-		{},
-		object,
-		{ [path]: value },
-	) as DeepImmutable<TObject>
-}
+declare type Primitive = (
+	undefined |
+	null |
+	boolean |
+	string |
+	number |
+	Function
+)
 
-type Primitive = undefined | null | boolean | string | number // | Function
+export declare type DeepImmutable<T> =
+	T extends Primitive
+		? T
+		: T extends Array<infer U>
+			? IDeepImmutableArray<U>
+			: T extends Map<infer K, infer V>
+				? IDeepImmutableMap<K, V>
+				: DeepImmutableObject<T>
 
-export type DeepImmutable<T> = T extends Primitive
-	? T
-	: T extends Array<infer U>
-		? IDeepImmutableArray<U>
-		: T extends Map<infer K, infer V>
-			? IDeepImmutableMap<K, V>
-			: DeepImmutableObject<T>
+interface IDeepImmutableArray<T> extends ReadonlyArray<
+	DeepImmutable<T>
+> {}
 
-interface IDeepImmutableArray<T> extends ReadonlyArray<DeepImmutable<T>> {}
-interface IDeepImmutableMap<K, V> extends ReadonlyMap<DeepImmutable<K>, DeepImmutable<V>> {}
-type DeepImmutableObject<T> = {
-	readonly [K in keyof T]: DeepImmutable<T[K]>
+interface IDeepImmutableMap<K, V> extends ReadonlyMap<
+	DeepImmutable<K>,
+	DeepImmutable<V>
+> {}
+
+declare type DeepImmutableObject<T> = {
+	readonly [K in keyof T]: DeepImmutable<T[K]>;
 }
