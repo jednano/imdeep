@@ -9,6 +9,7 @@
     "codecov": "codecov -f coverage/lcov.info",
     "build": "tsc",
     "lint": "tslint --project tsconfig.test.json",
+    "pretest": "npm run clean",
     "test": "ava",
     "watch": "npm test -- --watch",
     "prepack": "npm run lint && npm test && npm run build"
@@ -60,7 +61,8 @@
     ],
     "sources": [
       "src/**/*.ts"
-    ]
+    ],
+    "verbose": true
   },
   "devDependencies": {
     "ava": "1.0.0-rc.2",
