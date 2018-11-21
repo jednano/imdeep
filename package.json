@@ -1,0 +1,73 @@
+{
+  "name": "imdeep",
+  "version": "0.1.0",
+  "description": "Deep immutability helpers in TypeScript.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf coverage dist *.log imdeep-*",
+    "codecov": "codecov -f coverage/lcov.info",
+    "build": "tsc",
+    "lint": "tslint --project tsconfig.test.json",
+    "test": "ava",
+    "watch": "npm test -- --watch",
+    "prepack": "npm run lint && npm test && npm run build"
+  },
+  "nyc": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "include": [
+      "dist/**/*.js"
+    ],
+    "exclude": [
+      "dist/**/*.test.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "cache": true,
+    "all": true,
+    "check-coverage": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedmao/imdeep.git"
+  },
+  "keywords": [
+    "immutability",
+    "immutable",
+    "helpers",
+    "deep",
+    "set",
+    "typescript"
+  ],
+  "author": "Jed Mao <jedmao@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedmao/imdeep/issues"
+  },
+  "homepage": "https://github.com/jedmao/imdeep#readme",
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "sources": [
+      "src/**/*.ts"
+    ]
+  },
+  "devDependencies": {
+    "ava": "1.0.0-rc.2",
+    "nyc": "^13.1.0",
+    "rimraf": "^2.6.2",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6"
+  }
+}

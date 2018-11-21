@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "arrow-return-shorthand": true,
+    "indent": [true, "tabs"],
+    "quotemark": [true, "single"],
+    "semicolon": [true, "never"],
+    "trailing-comma": [true, "always"]
+  }
+}
