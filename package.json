@@ -10,8 +10,8 @@
     "build": "tsc",
     "lint": "tslint --project tsconfig.test.json",
     "pretest": "npm run clean",
-    "test": "ava",
-    "watch": "npm test -- --watch",
+    "test": "tsc -p tsconfig.test.json && nyc ava",
+    "watch": "ava --watch",
     "prepack": "npm run lint && npm test && npm run build"
   },
   "nyc": {
@@ -23,7 +23,8 @@
       "dist/**/*.js"
     ],
     "exclude": [
-      "dist/**/*.test.js"
+      "dist/**/*.test.js",
+      "dist/types.js"
     ],
     "reporter": [
       "lcov",

@@ -1,55 +1,24 @@
 import test from 'ava'
+import {
+	DeepImmutable,
+	get,
+	merge,
+	set,
+} from './'
 
-import { imget } from './'
-
-const immutableData = Object.freeze({
-	a: Object.freeze({
-		aa: Object.freeze({
-			aaa: 'AAA',
-			aab: 'AAB',
-		}),
-		ab: Object.freeze({
-			aba: 'ABA',
-			abb: 'ABB',
-		}),
-		ac: 'AC',
-	}),
-	b: Object.freeze({
-		ba: Object.freeze({
-			baa: 'BAA',
-			bab: 'BAB',
-		}),
-		bb: Object.freeze({
-			bba: 'BBA',
-			bbb: 'BBB',
-		}),
-		bc: 'BC',
-	}),
-	c: 'C',
+test('exports DeepImmutable', t => {
+	const obj = {}
+	t.is(obj as DeepImmutable<typeof obj>, obj)
 })
 
-test('imget gets a shallow primitive value', t => {
-	const result = imget(immutableData, ['c'])
-
-	t.deepEqual(result, immutableData.c)
+test('exports get', t => {
+	t.is(typeof get, 'function')
 })
 
-test('imget gets a shallow object value', t => {
-	const result = imget(immutableData, ['a'])
-
-	t.not(result, immutableData.a)
-	t.deepEqual(result, immutableData.a)
+test('exports merge', t => {
+	t.is(typeof merge, 'function')
 })
 
-test('imget gets a deep primitive value', t => {
-	const result = imget(immutableData, ['a', 'ac'])
-
-	t.deepEqual(result, immutableData.a.ac)
-})
-
-test('imget gets a deep object value', t => {
-	const result = imget(immutableData, ['a', 'aa'])
-
-	t.not(result, immutableData.a.aa)
-	t.deepEqual(result, immutableData.a.aa)
+test('exports set', t => {
+	t.is(typeof set, 'function')
 })
